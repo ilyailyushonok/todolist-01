@@ -1,0 +1,39 @@
+.app {
+  padding: 30px;
+  display: flex;
+}
+
+.app > div {
+  margin-right: 50px;
+}
+.task{
+  font-weight: 600;
+}
+.taskDone{
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+.btnActive{
+  background-color: #4CAF50;
+  color: white;
+  border:  2px solid green;
+  border-radius: 4px;
+
+}
+.btnAll{
+  background-color: #e6a108;
+  color: white;
+  border:  2px solid #e6a108;
+  border-radius: 4px;
+}
+.btnCompleted{
+  background-color: fuchsia;
+  color: white;
+  border:  2px solid fuchsia;
+  border-radius: 4px;
+
+}
+.error{
+  border: 1px solid red;
+  outline: none;
+}
