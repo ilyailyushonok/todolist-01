@@ -1,11 +1,11 @@
 import {ChangeEvent, KeyboardEvent, useState} from 'react';
 
-type AddTaskFormPropsType = {
-    createTask: (title: string) => void
+type AddItemFormPropsType = {
+    createItem: (title: string) => void
     maxTitleLength: number
 }
 
-export const AddTaskForm = ({createTask,maxTitleLength}: AddTaskFormPropsType) => {
+export const AddItemForm = ({createItem,maxTitleLength}: AddItemFormPropsType) => {
     const [taskInput, setTaskInput] = useState('')
     const [error, setError] = useState(false)
 
@@ -14,17 +14,17 @@ export const AddTaskForm = ({createTask,maxTitleLength}: AddTaskFormPropsType) =
     const onKeyDownHandler = () => {
         const trimmedTitle = taskInput.trim()
         if (trimmedTitle) {
-            createTask(taskInput)
+            createItem(taskInput)
             setTaskInput('')
         } else {
             setError(true)
         }
     }
-    const setTaskInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const setItemInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
         error&&setError(false)
         setTaskInput(e.currentTarget.value)
     }
-    const onKeyDownTaskHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+    const onKeyDownItemHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter" && !isAddDisabled) {
             onKeyDownHandler()
         }
@@ -34,8 +34,8 @@ export const AddTaskForm = ({createTask,maxTitleLength}: AddTaskFormPropsType) =
     return (
         <div>
             <input placeholder={'Add Task'} value={taskInput}
-                   onKeyDown={onKeyDownTaskHandler}
-                   onChange={setTaskInputHandler}
+                   onKeyDown={onKeyDownItemHandler}
+                   onChange={setItemInputHandler}
                    className={error ? 'error' : ''}
             />
 
@@ -50,14 +50,14 @@ export const AddTaskForm = ({createTask,maxTitleLength}: AddTaskFormPropsType) =
     )
 }
 
-// export const AddTaskForm = ({createTask}: AddTaskFormPropsType) => {
+// export const AddItemForm = ({createItem}: AddItemFormPropsType) => {
 //     const inputRef = useRef<HTMLInputElement>(null);
 //     return (
 //         <div>
 //             <input ref={inputRef}/>
 //             <button onClick={() => {
 //                 if (inputRef.current && inputRef.current.value!=='') {
-//                     createTask(inputRef.current.value)
+//                     createItem(inputRef.current.value)
 //                     inputRef.current.value = ''
 //                 }
 //             }}>+
