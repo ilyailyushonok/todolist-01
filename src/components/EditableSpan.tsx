@@ -1,12 +1,13 @@
 import {ChangeEvent, useState} from 'react';
+import {TextField} from '@mui/material';
 
 type EditableSpanPropsType = {
     title: string,
     classNames: string,
-    changeTitle:(title: string) => void,
+    changeTitle: (title: string) => void,
 }
 
-export const EditableSpan = ({title, classNames,changeTitle}: EditableSpanPropsType) => {
+export const EditableSpan = ({title, classNames, changeTitle}: EditableSpanPropsType) => {
     const [titleInput, setTitleInput] = useState('')
     const [isEitMode, setIsEitMode] = useState(false);
 
@@ -19,10 +20,11 @@ export const EditableSpan = ({title, classNames,changeTitle}: EditableSpanPropsT
         setTitleInput(e.currentTarget.value)
     }
     return (isEitMode
-            ? <input onBlur={onOffEditMode}
-                     autoFocus
-                     value={titleInput}
-                     onChange={setTitleInputHandler}
+            ? <TextField variant={'standard'}
+                onBlur={onOffEditMode}
+                autoFocus
+                value={titleInput}
+                onChange={setTitleInputHandler}
             />
             : <span onDoubleClick={onOffEditMode}
                     className={classNames}

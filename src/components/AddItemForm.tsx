@@ -1,11 +1,13 @@
 import {ChangeEvent, KeyboardEvent, useState} from 'react';
+import {TextField} from '@mui/material';
+import Button from '@mui/material/Button';
 
 type AddItemFormPropsType = {
     createItem: (title: string) => void
     maxTitleLength: number
 }
 
-export const AddItemForm = ({createItem,maxTitleLength}: AddItemFormPropsType) => {
+export const AddItemForm = ({createItem, maxTitleLength}: AddItemFormPropsType) => {
     const [taskInput, setTaskInput] = useState('')
     const [error, setError] = useState(false)
 
@@ -21,7 +23,7 @@ export const AddItemForm = ({createItem,maxTitleLength}: AddItemFormPropsType) =
         }
     }
     const setItemInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        error&&setError(false)
+        error && setError(false)
         setTaskInput(e.currentTarget.value)
     }
     const onKeyDownItemHandler = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -33,19 +35,24 @@ export const AddItemForm = ({createItem,maxTitleLength}: AddItemFormPropsType) =
 
     return (
         <div>
-            <input placeholder={'Add Task'} value={taskInput}
-                   onKeyDown={onKeyDownItemHandler}
-                   onChange={setItemInputHandler}
-                   className={error ? 'error' : ''}
+            <TextField variant={'outlined'} size={'small'}
+                       label={`${maxTitleLength} символов максимум`} value={taskInput}
+                       onKeyDown={onKeyDownItemHandler}
+                       onChange={setItemInputHandler}
+                       className={error ? 'error' : ''}
+                       helperText={taskInput.length > maxTitleLength &&
+                           <div style={{color: 'red'}}>избыточное количество символов</div>}
             />
 
-            <button disabled={isAddDisabled}
+            <Button variant={'contained'}
+                    disabled={isAddDisabled}
                     onClick={onKeyDownHandler}
-            >+</button>
+            >+
+            </Button>
 
             {error && <div style={{color: 'red'}}>пустая строка!</div>}
-            {taskInput && <div>максимум {maxTitleLength} символов</div>}
-            {taskInput.length > maxTitleLength && <div style={{color: 'red'}}>избыточное количество символов</div>}
+            {/*{taskInput && <div>максимум {maxTitleLength} символов</div>}*/}
+            {/*{taskInput.length > maxTitleLength && <div style={{color: 'red'}}>избыточное количество символов</div>}*/}
         </div>
     )
 }
