@@ -102,9 +102,7 @@ function App() {
 
     const todoListsComponents = todoLists.map(tl => {
         let filteredTasks: Array<TaskType> = tasks[tl.id]; //[]
-        // if (tl.filter === 'all') {
-        //     filteredTasks = tasks[tl.id]
-        // }
+
         if (tl.filter === 'active') {
             filteredTasks = tasks[tl.id].filter(task => !task.isDone)
         }
