@@ -1,6 +1,6 @@
 import './App.css'
 import {TaskType, TodolistItem} from "./components/TodolistItem.tsx";
-import {useState} from 'react';
+import {useReducer, useState} from 'react';
 import {v1} from 'uuid';
 import {AddItemForm} from './components/AddItemForm.tsx';
 import AppBar from '@mui/material/AppBar';
@@ -19,6 +19,12 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import {NavButton} from './components/NavButton.tsx';
 import {green, purple} from '@mui/material/colors';
+import {
+    changeTodolistFilterAC, changeTodolistTitleAC,
+    createTodolistAC,
+    deleteTodolistAC,
+    todolistsReducer
+} from './model/TodolistsReducer.ts';
 
 
 export type FilteredType = 'all' | 'active' | 'completed'
@@ -38,10 +44,12 @@ function App() {
 
     const todolistId_1 = v1()
     const todolistId_2 = v1()
-    const [todoLists, setTodoLists] = useState<Array<TodolistType>>([
+
+    const initialState: TodolistType[] = [
         {id: todolistId_1, title: 'todolist', filter: 'all'},
         {id: todolistId_2, title: 'What to buy', filter: 'all'}
-    ])
+    ]
+    const [todoLists, dispatchTodoLists] = useReducer(todolistsReducer, initialState)
 
     const [tasks, setTasks] = useState<TaskStateType>({
             [todolistId_1]: [
@@ -88,17 +96,19 @@ function App() {
 
 
     const changeTodolistFilter = (newFilterValue: FilteredType, todolistId: string) => {
-        setTodoLists(todoLists.map(tl => tl.id === todolistId ? {...tl, filter: newFilterValue} : tl));
+        dispatchTodoLists(changeTodolistFilterAC({filter: newFilterValue, id: todolistId}))
     }
-
+//delete todolist
     const deleteTodolist = (todolistId: string) => {
-        setTodoLists(todoLists.filter(tl => tl.id !== todolistId))
+        const action = deleteTodolistAC(todolistId)
+        dispatchTodoLists(action)
         delete tasks[todolistId]
     }
     //create todolist
     const createTodolist = (title: string) => {
         const newTodolistId = v1()
-        setTodoLists([...todoLists, {id: newTodolistId, title, filter: 'all'}])
+        const action = createTodolistAC(title, newTodolistId)
+        dispatchTodoLists(action)
         setTasks({...tasks, [newTodolistId]: []})
 
     }
@@ -113,7 +123,7 @@ function App() {
     }
     //update todolist title
     const changeTodolistTitle = (title: string, todolistId: string) => {
-        setTodoLists(todoLists.map(tl => tl.id === todolistId ? {...tl, title} : tl));
+        dispatchTodoLists(changeTodolistTitleAC({title, id: todolistId}))
     }
 
     const todoListsComponents = todoLists.map(tl => {
@@ -149,9 +159,9 @@ function App() {
 
     const theme = createTheme({
         palette: {
-            primary: purple ,
+            primary: purple,
             secondary: green,
-            mode:isDarkMode? 'dark':'light',
+            mode: isDarkMode ? 'dark' : 'light',
         }
     })
     return (
@@ -165,10 +175,10 @@ function App() {
                                 <MenuIcon/>
                             </IconButton>
                             <Box>
-                                <NavButton >Sign in</NavButton>
+                                <NavButton>Sign in</NavButton>
                                 <NavButton>Sign up</NavButton>
                                 <NavButton backGround={theme.palette.secondary.dark}>FAQ</NavButton>
-<Switch color={'secondary'} onChange={()=>setIsDarkMode(!isDarkMode)}/>
+                                <Switch color={'secondary'} onChange={() => setIsDarkMode(!isDarkMode)}/>
                             </Box>
                         </Container>
                     </Toolbar>

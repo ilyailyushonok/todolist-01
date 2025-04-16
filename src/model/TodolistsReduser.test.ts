@@ -1,12 +1,19 @@
 import { v1 } from 'uuid'
-import { expect, test } from 'vitest'
+import { beforeEach,expect, test } from 'vitest'
 import type { TodolistType } from '../App'
-import { createTodolistAC, deleteTodolistAC, todolistsReducer } from './TodolistsReducer.ts'
+import {
+    changeTodolistFilterAC,
+    changeTodolistTitleAC,
+    createTodolistAC,
+    deleteTodolistAC,
+    todolistsReducer
+} from './TodolistsReducer.ts'
 
 let todolistId1: string
 let todolistId2: string
 
 let startState: TodolistType[] =[]
+//чтобы не создавать стартовый стейт для каждого теста
 beforeEach(() => {
     todolistId1 = v1()
     todolistId2 = v1()
@@ -46,17 +53,25 @@ test('correct todolist should be deleted', () => {
 })
 
 test('correct todolist should be created', () => {
-    // const todolistId1 = v1()
-    // const todolistId2 = v1()
-    //
-    // const startState: TodolistType[] = [
-    //     { id: todolistId1, title: 'What to learn', filter: 'all' },
-    //     { id: todolistId2, title: 'What to buy', filter: 'all' },
-    // ]
-
     const title = 'New todolist'
     const endState = todolistsReducer(startState, createTodolistAC(title, v1()))
 
     expect(endState.length).toBe(3)
     expect(endState[2].title).toBe(title)
+})
+
+test('correct todolist should change its title', () => {
+    const title = 'New title'
+    const endState = todolistsReducer(startState,changeTodolistTitleAC({id:todolistId2,title}) )
+
+    expect(endState[0].title).toBe('What to learn')
+    expect(endState[1].title).toBe(title)
+})
+
+test('correct todolist should change its filter', () => {
+    const filter = 'completed'
+    const endState = todolistsReducer(startState,changeTodolistFilterAC({id:todolistId2,filter}) )
+
+    expect(endState[0].filter).toBe('all')
+    expect(endState[1].filter).toBe(filter)
 })
