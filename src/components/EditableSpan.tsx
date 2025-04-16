@@ -8,7 +8,7 @@ type EditableSpanPropsType = {
 }
 
 export const EditableSpan = ({title, classNames, changeTitle}: EditableSpanPropsType) => {
-    const [titleInput, setTitleInput] = useState('')
+    const [titleInput, setTitleInput] = useState(title)
     const [isEitMode, setIsEitMode] = useState(false);
 
     const onOffEditMode = () => {
